@@ -16,10 +16,15 @@ public class Blower : MonoBehaviour
         _creator.Created -= BlowUp;
     }
 
-    private void BlowUp(Rigidbody cube)
+    private void BlowUp(CubeInitializer cube)
     {
         Vector3 explosionPosition = cube.transform.position;
 
-        cube.AddExplosionForce(_explosionForce, explosionPosition, _explosionRadius);
+        Rigidbody rigidbody = cube.GetComponent<Rigidbody>();
+
+        if (rigidbody != null)
+        {
+            rigidbody.AddExplosionForce(_explosionForce, explosionPosition, _explosionRadius);
+        }
     }
 }

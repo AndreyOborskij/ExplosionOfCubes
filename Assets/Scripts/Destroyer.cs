@@ -5,7 +5,7 @@ public class Destroyer : MonoBehaviour
 {
     [SerializeField] private Clicker _clicker;
 
-    public event Action<Rigidbody> Destroyed;
+    public event Action<CubeInitializer> Destroyed;
 
     private void OnEnable()
     {
@@ -17,18 +17,15 @@ public class Destroyer : MonoBehaviour
         _clicker.Clicked -= DestroyCube;
     }
 
-    private void DestroyCube(Rigidbody cube)
+    private void DestroyCube(CubeInitializer cube)
     {
         CalculateProbability probability = cube.GetComponent<CalculateProbability>();
 
-        if (probability.Compute == true)
+        if (probability != null && probability.Determine() == true)
         {
             Destroyed?.Invoke(cube);
-            Destroy(cube.gameObject);
         }
-        else
-        {
-            Destroy(cube.gameObject);
-        }
+
+        Destroy(cube.gameObject);
     }    
 }

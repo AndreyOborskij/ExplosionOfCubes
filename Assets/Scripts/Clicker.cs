@@ -5,18 +5,20 @@ public class Clicker : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
 
-    public event Action<Rigidbody> Clicked;
+    private int _clickLeftMouseButton = 0;
+
+    public event Action<CubeInitializer> Clicked;
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(_clickLeftMouseButton))
         {
-            Ray _ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(_ray, out hit))
+            if (Physics.Raycast(ray, out hit))
             {
-                Rigidbody body = hit.collider.GetComponent<Rigidbody>();
+                CubeInitializer body = hit.collider.GetComponent<CubeInitializer>();
 
                 Clicked?.Invoke(body);
             }

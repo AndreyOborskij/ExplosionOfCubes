@@ -10,7 +10,7 @@ public class Creator : MonoBehaviour
     private int _decreaseSize = 2;
     private int _decreasePercent = 2;
 
-    public event Action<Rigidbody> Created;
+    public event Action<CubeInitializer> Created;
 
     private void OnEnable()
     {
@@ -22,27 +22,25 @@ public class Creator : MonoBehaviour
         _destroyer.Destroyed -= CreateCube;
     }
 
-    private void CreateCube(Rigidbody cube)
+    private void CreateCube(CubeInitializer cube)
     {
         int countCubes = UnityEngine.Random.Range(_minCountCubes, _maxCountCubes + 1);
 
         for (int i = 0; i < countCubes; i++)
         {
-            Rigidbody copy = Instantiate(cube);
+            CubeInitializer copy = Instantiate(cube);
 
             CreateDifferences(copy);
             Created?.Invoke(copy);
         }
     }
 
-    private void CreateDifferences(Rigidbody newCube)
+    private void CreateDifferences(CubeInitializer newCube)
     {
-        CubeInitializer cubeInitializer = newCube.GetComponent<CubeInitializer>();
-
         Color newColor = UnityEngine.Random.ColorHSV();
         Vector3 newSize = newCube.transform.localScale / _decreaseSize;
-        float splitChance = cubeInitializer.SplitChance / _decreasePercent;
+        float splitChance = newCube.SplitChance / _decreasePercent;
 
-        cubeInitializer.Init(newColor, newSize, splitChance);
+        newCube.Init(newColor, newSize, splitChance);
     }
 }
